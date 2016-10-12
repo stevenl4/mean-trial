@@ -6,25 +6,37 @@
     .module('customers')
     .controller('CustomersController', CustomersController);
 
-  CustomersController.$inject = ['$scope', '$state', 'Authentication', 'customerResolve'];
+  CustomersController.$inject = ['$scope', '$state', '$modalInstance', 'Authentication', 'customerResolve', 'NotifyService'];
 
-  function CustomersController ($scope, $state, Authentication, customer) {
+  function CustomersController ($scope, $state, $modalInstance, Authentication, customer, NotifyService) {
+
     var vm = this;
-
     vm.authentication = Authentication;
     vm.customer = customer;
     vm.error = null;
     vm.form = {};
     vm.remove = remove;
     vm.save = save;
-
+    vm.cancel = cancel;
+    
+    // Options for dropdown
+    vm.channelOptions = [
+      {id: 1, item: 'Facebook'},
+      {id: 2, item: 'Twitter'},
+      {id: 3, item: 'Email'}
+    ];
     // Remove existing Customer
     function remove() {
-      if (confirm('Are you sure you want to delete?')) {
-        vm.customer.$remove($state.go('customers.list'));
-      }
+      $modalInstance.close('Deleted');
+      vm.customer.$remove($state.go('customers.list', {}, {reload: true}));
+
     }
 
+    // Modal Cancel
+    function cancel() {
+      $modalInstance.dismiss('cancel');
+    }
+    
     // Save Customer
     function save(isValid) {
       if (!isValid) {
@@ -40,12 +52,12 @@
       }
 
       function successCallback(res) {
-        $state.go('customers.view', {
-          customerId: res._id
-        });
+        $modalInstance.close('Saved');
+        $state.go('customers.list', {}, {reload: true});
       }
 
       function errorCallback(res) {
+        console.log(res.data);
         vm.error = res.data.message;
       }
     }

@@ -9,10 +9,15 @@ var mongoose = require('mongoose'),
 /**
  * Customer Schema
  */
+var ChannelSchema = new Schema({
+  id: Number,
+  item: String
+});
 var CustomerSchema = new Schema({
   firstName: {
     type: String,
     default: '',
+    required: true,
     trim: true
   },
   surname: {
@@ -51,9 +56,8 @@ var CustomerSchema = new Schema({
     trim: true
   },
   channel: {
-    type: String,
-    default: '',
-    trim: true
+    type: ChannelSchema,
+    default: {}
   },
   created: {
     type: Date,

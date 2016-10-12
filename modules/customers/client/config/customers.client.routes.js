@@ -21,7 +21,7 @@
         controllerAs: 'vm',
         data: {
           pageTitle: 'Customers List'
-        }
+        }    
       })
       .state('customers.create', {
         url: '/create',
@@ -31,7 +31,7 @@
         resolve: {
           customerResolve: newCustomer
         },
-        data: {
+        data: { 
           roles: ['user', 'admin'],
           pageTitle : 'Customers Create'
         }
@@ -58,7 +58,7 @@
           customerResolve: getCustomer
         },
         data:{
-          pageTitle: 'Customer {{ articleResolve.name }}'
+          pageTitle: 'Customer {{ customerResolve.name }}'
         }
       });
   }
